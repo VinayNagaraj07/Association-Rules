@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 600px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "id": "frozenset({\u0027ItalCook\u0027})", "label": "frozenset({\u0027ItalCook\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027CookBks\u0027})", "label": "frozenset({\u0027CookBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027YouthBks\u0027, \u0027DoItYBks\u0027})", "label": "frozenset({\u0027YouthBks\u0027, \u0027DoItYBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027ChildBks\u0027})", "label": "frozenset({\u0027ChildBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027RefBks\u0027, \u0027YouthBks\u0027})", "label": "frozenset({\u0027RefBks\u0027, \u0027YouthBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027YouthBks\u0027, \u0027GeogBks\u0027})", "label": "frozenset({\u0027YouthBks\u0027, \u0027GeogBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027CookBks\u0027, \u0027RefBks\u0027})", "label": "frozenset({\u0027CookBks\u0027, \u0027RefBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027RefBks\u0027, \u0027ChildBks\u0027})", "label": "frozenset({\u0027RefBks\u0027, \u0027ChildBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027ChildBks\u0027, \u0027ItalCook\u0027})", "label": "frozenset({\u0027ChildBks\u0027, \u0027ItalCook\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027RefBks\u0027, \u0027DoItYBks\u0027})", "label": "frozenset({\u0027RefBks\u0027, \u0027DoItYBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027RefBks\u0027, \u0027ArtBks\u0027})", "label": "frozenset({\u0027RefBks\u0027, \u0027ArtBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027RefBks\u0027, \u0027GeogBks\u0027})", "label": "frozenset({\u0027RefBks\u0027, \u0027GeogBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027ItalCook\u0027, \u0027GeogBks\u0027})", "label": "frozenset({\u0027ItalCook\u0027, \u0027GeogBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027ArtBks\u0027, \u0027YouthBks\u0027})", "label": "frozenset({\u0027ArtBks\u0027, \u0027YouthBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027YouthBks\u0027, \u0027ItalCook\u0027})", "label": "frozenset({\u0027YouthBks\u0027, \u0027ItalCook\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027ArtBks\u0027, \u0027DoItYBks\u0027})", "label": "frozenset({\u0027ArtBks\u0027, \u0027DoItYBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027DoItYBks\u0027, \u0027GeogBks\u0027})", "label": "frozenset({\u0027DoItYBks\u0027, \u0027GeogBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027DoItYBks\u0027, \u0027ItalCook\u0027})", "label": "frozenset({\u0027DoItYBks\u0027, \u0027ItalCook\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027ArtBks\u0027, \u0027GeogBks\u0027})", "label": "frozenset({\u0027ArtBks\u0027, \u0027GeogBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027ArtBks\u0027, \u0027ItalCook\u0027})", "label": "frozenset({\u0027ArtBks\u0027, \u0027ItalCook\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027CookBks\u0027, \u0027YouthBks\u0027, \u0027DoItYBks\u0027})", "label": "frozenset({\u0027CookBks\u0027, \u0027YouthBks\u0027, \u0027DoItYBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027YouthBks\u0027, \u0027DoItYBks\u0027, \u0027ChildBks\u0027})", "label": "frozenset({\u0027YouthBks\u0027, \u0027DoItYBks\u0027, \u0027ChildBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027CookBks\u0027, \u0027YouthBks\u0027, \u0027RefBks\u0027})", "label": "frozenset({\u0027CookBks\u0027, \u0027YouthBks\u0027, \u0027RefBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027RefBks\u0027, \u0027YouthBks\u0027, \u0027ChildBks\u0027})", "label": "frozenset({\u0027RefBks\u0027, \u0027YouthBks\u0027, \u0027ChildBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027CookBks\u0027, \u0027ArtBks\u0027, \u0027YouthBks\u0027})", "label": "frozenset({\u0027CookBks\u0027, \u0027ArtBks\u0027, \u0027YouthBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027ArtBks\u0027, \u0027YouthBks\u0027, \u0027ChildBks\u0027})", "label": "frozenset({\u0027ArtBks\u0027, \u0027YouthBks\u0027, \u0027ChildBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027CookBks\u0027, \u0027YouthBks\u0027, \u0027GeogBks\u0027})", "label": "frozenset({\u0027CookBks\u0027, \u0027YouthBks\u0027, \u0027GeogBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027YouthBks\u0027, \u0027ChildBks\u0027, \u0027GeogBks\u0027})", "label": "frozenset({\u0027YouthBks\u0027, \u0027ChildBks\u0027, \u0027GeogBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027RefBks\u0027, \u0027YouthBks\u0027, \u0027DoItYBks\u0027})", "label": "frozenset({\u0027RefBks\u0027, \u0027YouthBks\u0027, \u0027DoItYBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027ArtBks\u0027, \u0027YouthBks\u0027, \u0027DoItYBks\u0027})", "label": "frozenset({\u0027ArtBks\u0027, \u0027YouthBks\u0027, \u0027DoItYBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027YouthBks\u0027, \u0027DoItYBks\u0027, \u0027GeogBks\u0027})", "label": "frozenset({\u0027YouthBks\u0027, \u0027DoItYBks\u0027, \u0027GeogBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027RefBks\u0027, \u0027YouthBks\u0027, \u0027GeogBks\u0027})", "label": "frozenset({\u0027RefBks\u0027, \u0027YouthBks\u0027, \u0027GeogBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027ArtBks\u0027, \u0027YouthBks\u0027, \u0027GeogBks\u0027})", "label": "frozenset({\u0027ArtBks\u0027, \u0027YouthBks\u0027, \u0027GeogBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027CookBks\u0027, \u0027DoItYBks\u0027, \u0027RefBks\u0027})", "label": "frozenset({\u0027CookBks\u0027, \u0027DoItYBks\u0027, \u0027RefBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027RefBks\u0027, \u0027DoItYBks\u0027, \u0027ChildBks\u0027})", "label": "frozenset({\u0027RefBks\u0027, \u0027DoItYBks\u0027, \u0027ChildBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027CookBks\u0027, \u0027ArtBks\u0027, \u0027DoItYBks\u0027})", "label": "frozenset({\u0027CookBks\u0027, \u0027ArtBks\u0027, \u0027DoItYBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027ArtBks\u0027, \u0027DoItYBks\u0027, \u0027ChildBks\u0027})", "label": "frozenset({\u0027ArtBks\u0027, \u0027DoItYBks\u0027, \u0027ChildBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027CookBks\u0027, \u0027DoItYBks\u0027, \u0027GeogBks\u0027})", "label": "frozenset({\u0027CookBks\u0027, \u0027DoItYBks\u0027, \u0027GeogBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027DoItYBks\u0027, \u0027ChildBks\u0027, \u0027GeogBks\u0027})", "label": "frozenset({\u0027DoItYBks\u0027, \u0027ChildBks\u0027, \u0027GeogBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027CookBks\u0027, \u0027ArtBks\u0027, \u0027RefBks\u0027})", "label": "frozenset({\u0027CookBks\u0027, \u0027ArtBks\u0027, \u0027RefBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027ArtBks\u0027, \u0027ChildBks\u0027, \u0027RefBks\u0027})", "label": "frozenset({\u0027ArtBks\u0027, \u0027ChildBks\u0027, \u0027RefBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027CookBks\u0027, \u0027RefBks\u0027, \u0027GeogBks\u0027})", "label": "frozenset({\u0027CookBks\u0027, \u0027RefBks\u0027, \u0027GeogBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027RefBks\u0027, \u0027ChildBks\u0027, \u0027GeogBks\u0027})", "label": "frozenset({\u0027RefBks\u0027, \u0027ChildBks\u0027, \u0027GeogBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027CookBks\u0027, \u0027ArtBks\u0027, \u0027GeogBks\u0027})", "label": "frozenset({\u0027CookBks\u0027, \u0027ArtBks\u0027, \u0027GeogBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027ArtBks\u0027, \u0027ChildBks\u0027, \u0027GeogBks\u0027})", "label": "frozenset({\u0027ArtBks\u0027, \u0027ChildBks\u0027, \u0027GeogBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027CookBks\u0027, \u0027ItalCook\u0027, \u0027GeogBks\u0027})", "label": "frozenset({\u0027CookBks\u0027, \u0027ItalCook\u0027, \u0027GeogBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027ChildBks\u0027, \u0027ItalCook\u0027, \u0027GeogBks\u0027})", "label": "frozenset({\u0027ChildBks\u0027, \u0027ItalCook\u0027, \u0027GeogBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027CookBks\u0027, \u0027ChildBks\u0027})", "label": "frozenset({\u0027CookBks\u0027, \u0027ChildBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027RefBks\u0027, \u0027DoItYBks\u0027, \u0027GeogBks\u0027})", "label": "frozenset({\u0027RefBks\u0027, \u0027DoItYBks\u0027, \u0027GeogBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027ArtBks\u0027, \u0027DoItYBks\u0027, \u0027GeogBks\u0027})", "label": "frozenset({\u0027ArtBks\u0027, \u0027DoItYBks\u0027, \u0027GeogBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027CookBks\u0027, \u0027YouthBks\u0027, \u0027DoItYBks\u0027, \u0027GeogBks\u0027})", "label": "frozenset({\u0027CookBks\u0027, \u0027YouthBks\u0027, \u0027DoItYBks\u0027, \u0027GeogBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027YouthBks\u0027, \u0027DoItYBks\u0027, \u0027ChildBks\u0027, \u0027GeogBks\u0027})", "label": "frozenset({\u0027YouthBks\u0027, \u0027DoItYBks\u0027, \u0027ChildBks\u0027, \u0027GeogBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027CookBks\u0027, \u0027ArtBks\u0027, \u0027DoItYBks\u0027, \u0027GeogBks\u0027})", "label": "frozenset({\u0027CookBks\u0027, \u0027ArtBks\u0027, \u0027DoItYBks\u0027, \u0027GeogBks\u0027})", "shape": "dot"}, {"color": "#97c2fc", "id": "frozenset({\u0027ArtBks\u0027, \u0027DoItYBks\u0027, \u0027ChildBks\u0027, \u0027GeogBks\u0027})", "label": "frozenset({\u0027ArtBks\u0027, \u0027DoItYBks\u0027, \u0027ChildBks\u0027, \u0027GeogBks\u0027})", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "frozenset({\u0027ItalCook\u0027})", "to": "frozenset({\u0027CookBks\u0027})", "width": 1.0}, {"arrows": "to", "from": "frozenset({\u0027YouthBks\u0027, \u0027DoItYBks\u0027})", "to": "frozenset({\u0027ChildBks\u0027})", "width": 0.8225108225108225}, {"arrows": "to", "from": "frozenset({\u0027RefBks\u0027, \u0027YouthBks\u0027})", "to": "frozenset({\u0027ChildBks\u0027})", "width": 0.8601036269430052}, {"arrows": "to", "from": "frozenset({\u0027YouthBks\u0027, \u0027GeogBks\u0027})", "to": "frozenset({\u0027ChildBks\u0027})", "width": 0.8215767634854773}, {"arrows": "to", "from": "frozenset({\u0027CookBks\u0027, \u0027RefBks\u0027})", "to": "frozenset({\u0027ChildBks\u0027})", "width": 0.8032786885245902}, {"arrows": "to", "from": "frozenset({\u0027RefBks\u0027, \u0027ChildBks\u0027})", "to": "frozenset({\u0027CookBks\u0027})", "width": 0.8085808580858086}, {"arrows": "to", "from": "frozenset({\u0027ChildBks\u0027, \u0027ItalCook\u0027})", "to": "frozenset({\u0027CookBks\u0027})", "width": 1.0}, {"arrows": "to", "from": "frozenset({\u0027RefBks\u0027, \u0027DoItYBks\u0027})", "to": "frozenset({\u0027ChildBks\u0027})", "width": 0.8530805687203792}, {"arrows": "to", "from": "frozenset({\u0027RefBks\u0027, \u0027ArtBks\u0027})", "to": "frozenset({\u0027ChildBks\u0027})", "width": 0.8491620111731844}, {"arrows": "to", "from": "frozenset({\u0027RefBks\u0027, \u0027GeogBks\u0027})", "to": "frozenset({\u0027ChildBks\u0027})", "width": 0.8506787330316742}, {"arrows": "to", "from": "frozenset({\u0027ItalCook\u0027, \u0027GeogBks\u0027})", "to": "frozenset({\u0027ChildBks\u0027})", "width": 0.8203125}, {"arrows": "to", "from": "frozenset({\u0027YouthBks\u0027, \u0027DoItYBks\u0027})", "to": "frozenset({\u0027CookBks\u0027})", "width": 0.8225108225108225}, {"arrows": "to", "from": "frozenset({\u0027RefBks\u0027, \u0027YouthBks\u0027})", "to": "frozenset({\u0027CookBks\u0027})", "width": 0.8031088082901554}, {"arrows": "to", "from": "frozenset({\u0027ArtBks\u0027, \u0027YouthBks\u0027})", "to": "frozenset({\u0027CookBks\u0027})", "width": 0.8019801980198019}, {"arrows": "to", "from": "frozenset({\u0027YouthBks\u0027, \u0027GeogBks\u0027})", "to": "frozenset({\u0027CookBks\u0027})", "width": 0.8049792531120332}, {"arrows": "to", "from": "frozenset({\u0027YouthBks\u0027, \u0027ItalCook\u0027})", "to": "frozenset({\u0027CookBks\u0027})", "width": 1.0}, {"arrows": "to", "from": "frozenset({\u0027RefBks\u0027, \u0027DoItYBks\u0027})", "to": "frozenset({\u0027CookBks\u0027})", "width": 0.8009478672985783}, {"arrows": "to", "from": "frozenset({\u0027ArtBks\u0027, \u0027DoItYBks\u0027})", "to": "frozenset({\u0027CookBks\u0027})", "width": 0.8218623481781377}, {"arrows": "to", "from": "frozenset({\u0027DoItYBks\u0027, \u0027GeogBks\u0027})", "to": "frozenset({\u0027CookBks\u0027})", "width": 0.8188679245283018}, {"arrows": "to", "from": "frozenset({\u0027DoItYBks\u0027, \u0027ItalCook\u0027})", "to": "frozenset({\u0027CookBks\u0027})", "width": 1.0}, {"arrows": "to", "from": "frozenset({\u0027RefBks\u0027, \u0027GeogBks\u0027})", "to": "frozenset({\u0027CookBks\u0027})", "width": 0.8054298642533936}, {"arrows": "to", "from": "frozenset({\u0027ArtBks\u0027, \u0027GeogBks\u0027})", "to": "frozenset({\u0027CookBks\u0027})", "width": 0.8117647058823528}, {"arrows": "to", "from": "frozenset({\u0027ArtBks\u0027, \u0027ItalCook\u0027})", "to": "frozenset({\u0027CookBks\u0027})", "width": 1.0}, {"arrows": "to", "from": "frozenset({\u0027ItalCook\u0027, \u0027GeogBks\u0027})", "to": "frozenset({\u0027CookBks\u0027})", "width": 1.0}, {"arrows": "to", "from": "frozenset({\u0027CookBks\u0027, \u0027YouthBks\u0027, \u0027DoItYBks\u0027})", "to": "frozenset({\u0027ChildBks\u0027})", "width": 0.8631578947368421}, {"arrows": "to", "from": "frozenset({\u0027YouthBks\u0027, \u0027DoItYBks\u0027, \u0027ChildBks\u0027})", "to": "frozenset({\u0027CookBks\u0027})", "width": 0.8631578947368421}, {"arrows": "to", "from": "frozenset({\u0027CookBks\u0027, \u0027YouthBks\u0027, \u0027RefBks\u0027})", "to": "frozenset({\u0027ChildBks\u0027})", "width": 0.8774193548387097}, {"arrows": "to", "from": "frozenset({\u0027RefBks\u0027, \u0027YouthBks\u0027, \u0027ChildBks\u0027})", "to": "frozenset({\u0027CookBks\u0027})", "width": 0.8192771084337349}, {"arrows": "to", "from": "frozenset({\u0027CookBks\u0027, \u0027ArtBks\u0027, \u0027YouthBks\u0027})", "to": "frozenset({\u0027ChildBks\u0027})", "width": 0.8271604938271605}, {"arrows": "to", "from": "frozenset({\u0027ArtBks\u0027, \u0027YouthBks\u0027, \u0027ChildBks\u0027})", "to": "frozenset({\u0027CookBks\u0027})", "width": 0.8322981366459627}, {"arrows": "to", "from": "frozenset({\u0027CookBks\u0027, \u0027YouthBks\u0027, \u0027GeogBks\u0027})", "to": "frozenset({\u0027ChildBks\u0027})", "width": 0.8556701030927836}, {"arrows": "to", "from": "frozenset({\u0027YouthBks\u0027, \u0027ChildBks\u0027, \u0027GeogBks\u0027})", "to": "frozenset({\u0027CookBks\u0027})", "width": 0.8383838383838383}, {"arrows": "to", "from": "frozenset({\u0027RefBks\u0027, \u0027YouthBks\u0027, \u0027DoItYBks\u0027})", "to": "frozenset({\u0027ChildBks\u0027})", "width": 0.9137931034482758}, {"arrows": "to", "from": "frozenset({\u0027ArtBks\u0027, \u0027YouthBks\u0027, \u0027DoItYBks\u0027})", "to": "frozenset({\u0027ChildBks\u0027})", "width": 0.85}, {"arrows": "to", "from": "frozenset({\u0027YouthBks\u0027, \u0027DoItYBks\u0027, \u0027GeogBks\u0027})", "to": "frozenset({\u0027ChildBks\u0027})", "width": 0.8308823529411764}, {"arrows": "to", "from": "frozenset({\u0027RefBks\u0027, \u0027YouthBks\u0027, \u0027GeogBks\u0027})", "to": "frozenset({\u0027ChildBks\u0027})", "width": 0.9035087719298245}, {"arrows": "to", "from": "frozenset({\u0027ArtBks\u0027, \u0027YouthBks\u0027, \u0027GeogBks\u0027})", "to": "frozenset({\u0027ChildBks\u0027})", "width": 0.8461538461538461}, {"arrows": "to", "from": "frozenset({\u0027CookBks\u0027, \u0027DoItYBks\u0027, \u0027RefBks\u0027})", "to": "frozenset({\u0027ChildBks\u0027})", "width": 0.8816568047337278}, {"arrows": "to", "from": "frozenset({\u0027RefBks\u0027, \u0027DoItYBks\u0027, \u0027ChildBks\u0027})", "to": "frozenset({\u0027CookBks\u0027})", "width": 0.8277777777777777}, {"arrows": "to", "from": "frozenset({\u0027CookBks\u0027, \u0027ArtBks\u0027, \u0027DoItYBks\u0027})", "to": "frozenset({\u0027ChildBks\u0027})", "width": 0.8078817733990148}, {"arrows": "to", "from": "frozenset({\u0027ArtBks\u0027, \u0027DoItYBks\u0027, \u0027ChildBks\u0027})", "to": "frozenset({\u0027CookBks\u0027})", "width": 0.8631578947368421}, {"arrows": "to", "from": "frozenset({\u0027CookBks\u0027, \u0027DoItYBks\u0027, \u0027GeogBks\u0027})", "to": "frozenset({\u0027ChildBks\u0027})", "width": 0.8202764976958525}, {"arrows": "to", "from": "frozenset({\u0027DoItYBks\u0027, \u0027ChildBks\u0027, \u0027GeogBks\u0027})", "to": "frozenset({\u0027CookBks\u0027})", "width": 0.8516746411483254}, {"arrows": "to", "from": "frozenset({\u0027CookBks\u0027, \u0027ArtBks\u0027, \u0027RefBks\u0027})", "to": "frozenset({\u0027ChildBks\u0027})", "width": 0.8714285714285713}, {"arrows": "to", "from": "frozenset({\u0027ArtBks\u0027, \u0027ChildBks\u0027, \u0027RefBks\u0027})", "to": "frozenset({\u0027CookBks\u0027})", "width": 0.8026315789473685}, {"arrows": "to", "from": "frozenset({\u0027CookBks\u0027, \u0027RefBks\u0027, \u0027GeogBks\u0027})", "to": "frozenset({\u0027ChildBks\u0027})", "width": 0.8820224719101124}, {"arrows": "to", "from": "frozenset({\u0027RefBks\u0027, \u0027ChildBks\u0027, \u0027GeogBks\u0027})", "to": "frozenset({\u0027CookBks\u0027})", "width": 0.8351063829787234}, {"arrows": "to", "from": "frozenset({\u0027CookBks\u0027, \u0027ArtBks\u0027, \u0027GeogBks\u0027})", "to": "frozenset({\u0027ChildBks\u0027})", "width": 0.8067632850241547}, {"arrows": "to", "from": "frozenset({\u0027ArtBks\u0027, \u0027ChildBks\u0027, \u0027GeogBks\u0027})", "to": "frozenset({\u0027CookBks\u0027})", "width": 0.8186274509803922}, {"arrows": "to", "from": "frozenset({\u0027CookBks\u0027, \u0027ItalCook\u0027, \u0027GeogBks\u0027})", "to": "frozenset({\u0027ChildBks\u0027})", "width": 0.8203125}, {"arrows": "to", "from": "frozenset({\u0027ChildBks\u0027, \u0027ItalCook\u0027, \u0027GeogBks\u0027})", "to": "frozenset({\u0027CookBks\u0027})", "width": 1.0}, {"arrows": "to", "from": "frozenset({\u0027ItalCook\u0027, \u0027GeogBks\u0027})", "to": "frozenset({\u0027CookBks\u0027, \u0027ChildBks\u0027})", "width": 0.8203125}, {"arrows": "to", "from": "frozenset({\u0027RefBks\u0027, \u0027DoItYBks\u0027, \u0027GeogBks\u0027})", "to": "frozenset({\u0027ChildBks\u0027})", "width": 0.8974358974358974}, {"arrows": "to", "from": "frozenset({\u0027ArtBks\u0027, \u0027DoItYBks\u0027, \u0027GeogBks\u0027})", "to": "frozenset({\u0027ChildBks\u0027})", "width": 0.815068493150685}, {"arrows": "to", "from": "frozenset({\u0027ArtBks\u0027, \u0027YouthBks\u0027, \u0027DoItYBks\u0027})", "to": "frozenset({\u0027CookBks\u0027})", "width": 0.875}, {"arrows": "to", "from": "frozenset({\u0027YouthBks\u0027, \u0027DoItYBks\u0027, \u0027GeogBks\u0027})", "to": "frozenset({\u0027CookBks\u0027})", "width": 0.8823529411764705}, {"arrows": "to", "from": "frozenset({\u0027ArtBks\u0027, \u0027YouthBks\u0027, \u0027GeogBks\u0027})", "to": "frozenset({\u0027CookBks\u0027})", "width": 0.8615384615384615}, {"arrows": "to", "from": "frozenset({\u0027ArtBks\u0027, \u0027DoItYBks\u0027, \u0027GeogBks\u0027})", "to": "frozenset({\u0027CookBks\u0027})", "width": 0.8904109589041097}, {"arrows": "to", "from": "frozenset({\u0027CookBks\u0027, \u0027YouthBks\u0027, \u0027DoItYBks\u0027, \u0027GeogBks\u0027})", "to": "frozenset({\u0027ChildBks\u0027})", "width": 0.85}, {"arrows": "to", "from": "frozenset({\u0027YouthBks\u0027, \u0027DoItYBks\u0027, \u0027ChildBks\u0027, \u0027GeogBks\u0027})", "to": "frozenset({\u0027CookBks\u0027})", "width": 0.9026548672566371}, {"arrows": "to", "from": "frozenset({\u0027CookBks\u0027, \u0027ArtBks\u0027, \u0027DoItYBks\u0027, \u0027GeogBks\u0027})", "to": "frozenset({\u0027ChildBks\u0027})", "width": 0.823076923076923}, {"arrows": "to", "from": "frozenset({\u0027ArtBks\u0027, \u0027DoItYBks\u0027, \u0027ChildBks\u0027, \u0027GeogBks\u0027})", "to": "frozenset({\u0027CookBks\u0027})", "width": 0.8991596638655462}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
